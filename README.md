@@ -29,7 +29,7 @@
 - Mumbai and Mumbai Suburban excluded (no market data)
 - Raw raster files not included (exceeds GitHub limits)
 
-## 📚 How to Cite
+**How to Cite:**
 
 If you use this dashboard or data in your research, please cite:
 
