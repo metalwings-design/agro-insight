@@ -34,14 +34,14 @@
 If you use this dashboard or data in your research, please cite:
 
 **APA Style:**
-> Sanket Gharat (2024). *Maharashtra District Level Cropping Dashboard* (Version 1.0) [Software]. Zenodo. https://doi.org/10.5281/zenodo.19953413
+> Sanket Gharat (2024). *Maharashtra District Level Cropping Dynamics* (Version 1.0) [Software]. Zenodo. https://doi.org/10.5281/zenodo.19953413
 
 **BibTeX:**
 ```bibtex
 @software{agro_insight_2024,
-  author = {Your Name},
-  title = {Maharashtra District Level Cropping Dashboard},
-  year = {2024},
+  author = {Sanket Gharat},
+  title = {Maharashtra District Level Cropping Dynamics},
+  year = {2026},
   doi = {10.5281/zenodo.19953413},
   url = {https://github.com/yourusername/agro-insight},
   version = {1.0},
