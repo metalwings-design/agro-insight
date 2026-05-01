@@ -1,7 +1,7 @@
 # Maharashtra District Level Cropping dynamics Dashboard.
 
 [![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://agro-insight.streamlit.app)
-## Release 1.0 (2024-05-01)
+## Release 1.0 (2026-05-01)
 
 ### First stable release of Maharashtra District Level Cropping Dashboard
 
