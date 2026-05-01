@@ -38,12 +38,22 @@ Sanket G. (2026). metalwings-design/agro-insight: Maharashtra District Level Cro
 
 **BibTeX:**
 ```bibtex
-@software{agro_insight_2026,
-  author = {Sanket Gharat},
-  title = {Maharashtra District Level Cropping Dynamics},
-  year = {2026},
-  doi = {10.5281/zenodo.19953413},
-  url = {https://github.com/yourusername/agro-insight},
-  version = {1.0},
-  license = {GPL-3.0}
+@software{sanket_g_2026_19953413,
+  author       = {Sanket G.},
+  title        = {metalwings-design/agro-insight: Maharashtra
+                   District Level Cropping Dynamics
+                  },
+  month        = may,
+  year         = 2026,
+  publisher    = {Zenodo},
+  version      = {v1.0},
+  doi          = {10.5281/zenodo.19953413},
+  url          = {https://doi.org/10.5281/zenodo.19953413},
+  swhid        = {swh:1:dir:3a3a0a729a48e91e95b06dba27628f75d9e06577
+                   ;origin=https://doi.org/10.5281/zenodo.19953412;vi
+                   sit=swh:1:snp:da5af0a9b99d725347e6d43240299f1635d0
+                   c458;anchor=swh:1:rel:9ed15ccdb5f1595af3c7bf6abbdc
+                   ec11a289ab90;path=metalwings-design-agro-
+                   insight-43baf3b
+                  },
 }
