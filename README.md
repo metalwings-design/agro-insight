@@ -1,6 +1,6 @@
-# agro-insight
-Maharashtra District Level Cropping dynamics Dashboard.
+# Maharashtra District Level Cropping dynamics Dashboard.
 
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://agro-insight.streamlit.app)
 ## Release 1.0 (2024-05-01)
 
 ### First stable release of Maharashtra District Level Cropping Dashboard
@@ -29,5 +29,21 @@ Maharashtra District Level Cropping dynamics Dashboard.
 - Mumbai and Mumbai Suburban excluded (no market data)
 - Raw raster files not included (exceeds GitHub limits)
 
-**Citation:** 
-Your Name (2024). Agro-Insight Dashboard v1.0. https://github.com/yourusername/agro-insight
+## 📚 How to Cite
+
+If you use this dashboard or data in your research, please cite:
+
+**APA Style:**
+> Sanket Gharat (2024). *Maharashtra District Level Cropping Dashboard* (Version 1.0) [Software]. Zenodo. https://doi.org/10.5281/zenodo.19953413
+
+**BibTeX:**
+```bibtex
+@software{agro_insight_2024,
+  author = {Your Name},
+  title = {Maharashtra District Level Cropping Dashboard},
+  year = {2024},
+  doi = {10.5281/zenodo.19953413},
+  url = {https://github.com/yourusername/agro-insight},
+  version = {1.0},
+  license = {GPL-3.0}
+}
