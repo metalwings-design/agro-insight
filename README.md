@@ -34,7 +34,7 @@
 If you use this dashboard or data in your research, please cite:
 
 **APA Style:**
-> Sanket Gharat (2024). *Maharashtra District Level Cropping Dynamics* (Version 1.0) [Software]. Zenodo. https://doi.org/10.5281/zenodo.19953413
+> Sanket Gharat (2026). *Maharashtra District Level Cropping Dynamics* (Version 1.0) [Software]. Zenodo. https://doi.org/10.5281/zenodo.19953413
 
 **BibTeX:**
 ```bibtex
