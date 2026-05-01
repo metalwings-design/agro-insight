@@ -12,7 +12,8 @@ st.set_page_config(
 )
 
 # Constants & Paths
-BASE_PATH = r'C:\Users\user\Documents\freelance\core foss dashboard'
+import os
+BASE_PATH = os.path.dirname(os.path.abspath(__file__))
 PLOT_PATHS = {
     'intensity_trend': os.path.join(BASE_PATH, 'plot_1_cropping_intensity_trend'),
     'stack_plot': os.path.join(BASE_PATH, 'plot_2_stack_plot'),
