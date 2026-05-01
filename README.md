@@ -38,7 +38,7 @@ If you use this dashboard or data in your research, please cite:
 
 **BibTeX:**
 ```bibtex
-@software{agro_insight_2024,
+@software{agro_insight_2026,
   author = {Sanket Gharat},
   title = {Maharashtra District Level Cropping Dynamics},
   year = {2026},
