@@ -15,8 +15,8 @@ st.set_page_config(
 import os
 BASE_PATH = os.path.dirname(os.path.abspath(__file__))
 PLOT_PATHS = {
-    'intensity_trend': os.path.join(BASE_PATH, 'plot_1_cropping_intensity_trend'),
-    'stack_plot': os.path.join(BASE_PATH, 'plot_2_stack_plot'),
+    'cropping_combined': os.path.join(BASE_PATH, 'plot_1_cropping_combined'),
+    'apy_trends': os.path.join(BASE_PATH, 'plot_1.1_apy'),
     'intensity_table': os.path.join(BASE_PATH, 'plot_3_table_intensity', 'table_intensity.xlsx'),
     'hotspot_4': os.path.join(BASE_PATH, 'plot_4_value_8'),
     'hotspot_5': os.path.join(BASE_PATH, 'plot_5_value_9'),
@@ -27,23 +27,29 @@ PLOT_PATHS = {
     'dist_histo': os.path.join(BASE_PATH, 'plot_10_dist_histo'),
     'color_location': os.path.join(BASE_PATH, 'plot_11_color_by_location'),
     'scatter': os.path.join(BASE_PATH, 'plot_12_scatter'),
-    'sankey': os.path.join(BASE_PATH, 'plot_13_sankey'),
+    'scatter_stats': os.path.join(BASE_PATH, 'plot_12_scatter_stats'),
     'sankey_stats': os.path.join(BASE_PATH, 'plot_14_sankey_stats', 'sankey_stats.xlsx'),
 }
 
 CROPPING_OPTIONS = {
     "Single kharif": "single_kharif",
-    "Single non kharif": "single_non-kharif",
+    "Single non kharif": "single_non_kharif",
     "Double cropping": "double_cropping",
     "Triple cropping": "triple_cropping"
 }
+
+# Helper to map crop keys to folder names (handles hyphen vs underscore)
+def get_folder_name(crop_key):
+    if crop_key == "single_non_kharif":
+        return "single_non-kharif"
+    return crop_key
 
 # Helper Functions
 @st.cache_data
 def get_districts():
     """Dynamically populate district list based on files in data directory"""
     try:
-        files = os.listdir(PLOT_PATHS['intensity_trend'])
+        files = os.listdir(PLOT_PATHS['cropping_combined'])
         districts = [f.split('.')[0] for f in files if f.endswith('.jpeg')]
         return sorted(districts)
     except Exception as e:
@@ -75,7 +81,7 @@ def display_about_me():
     
     **Connect & Explore:**  
     - Blog: [infoaccess.wordpress.com](https://infoaccess.wordpress.com)  
-    - GitHub: [metalwings-design](https://github.com/metalwings-design)  
+    - GitHub: [metalwings-design](https://metalwings-design.github.io/)  
     - LinkedIn: [Sanket G.](https://www.linkedin.com)
     
     **Acknowledgment:**  
@@ -87,7 +93,7 @@ districts = get_districts()
 
 # Initialize session state for district selection and view mode
 if 'selected_district' not in st.session_state:
-    st.session_state.selected_district = "Hingoli"
+    st.session_state.selected_district = "Ahilyanagar"
 if 'view_mode' not in st.session_state:
     st.session_state.view_mode = "Home"
 
@@ -138,17 +144,15 @@ if st.session_state.view_mode == "Home":
     
     ### Understanding sections:
     
-    1. **Cropping intensity trend:** It shows overall cropping intensity change over time in district.
-    2. **Cropping pattern composition:** visual presentation shows how different cropping types by area are distributed across time period.
+    1. **Cropping dynamics (Trend & Composition):** It shows overall cropping intensity change and how different cropping types are distributed across time periods.
+    2. **Total Foodgrains APY Trends:** Displays three stacked line plots (Area, Production, Yield) for Total Foodgrains across the analyzed years to show district-level agricultural productivity. (source = UPAG data)
     3. **Cropping intensity tables:** Detail numerical table showing contribution of cropping type in district and cropping intensity across period. It will help to understand change in cropping proportion by type across period.
     4. **Density hotspot analysis:** Plot identify area of high concentration for each cropping type. **Red areas** indicate high density cluster where particular cropping pattern is dominant. Four separate plots by cropping types are available for analysis. It also shows river and water bodies, market yard, APMC mandi across all district.
     5. **Area coverage:** table represents total pixel coverage for each cropping type. It shows structural change took place across two time period.
-    6. **Distance hotspot statistics:** This table shows the distribution of distances from hotspot cluster to nearest market. It also contains statistical data across all 4 cropping types, it shows maximum, minimum, average distance etc. across two time periods.
-    7. **Distance to market histogram:** It shows distribution of distances from hotspot cluster to nearest markets. It helps to understand whether cropping intensification closer or away from market.
-    8. **Hotspot color by distance:** This plot shows hotspot location representing top 15% density hotspots across two time periods. Colors represent distance to market. Green color represent hotspots are closer to market, red color represents hotspots away from market. Visualization helps to identify spatial patterns to market accessibility.
-    9. **Scatter plot:** It examine relations between distance to market and cropping intensity.
-    10. **Cropping pattern transition:** Sankey diagram shows interactive flow diagram, it shows how land use transition between cropping types from 2017-2020 to 2022-2025. Thicker flow represent larger area transitioning between pattern.
-    11. **Sankey transition statistics:** Table presents numerical breakdown of all transition shown in Sankey diagram including top conversion pathway and percentage change.
+    6. **Distance to market histogram:** It shows distribution of distances from hotspot cluster to nearest markets. It helps to understand whether cropping intensification closer or away from market.
+    7. **Hotspot color by distance:** This plot shows hotspot location representing top 15% density hotspots across two time periods. Colors represent distance to market. Green color represent hotspots are closer to market, red color represents hotspots away from market. Includes download option for hotspot distance statistics.
+    8. **Scatter plot:** It examine relations between distance to market and cropping intensity.
+    9. **Land Use Transition Statistics:** Interactive table and summary metrics showing land use transition between cropping types, including total area changed, stable area, and percentage change across periods based on sankey plot statistics.
     """)
 
 elif st.session_state.view_mode == "About Me":
@@ -186,23 +190,23 @@ elif st.session_state.view_mode == "District Analysis":
 
     st.divider()
 
-    # 1. Cropping intensity trend (JPEG)
-    st.header("1. Cropping Intensity Trend")
-    img_1 = get_image_path(PLOT_PATHS['intensity_trend'], district)
-    if img_1:
-        st.image(img_1, caption=f"Cropping Intensity Trend - {district}", use_container_width=True)
+    # 1. Cropping Dynamics (Trend & Composition)
+    st.header("1. Cropping Dynamics (Trend & Composition)")
+    img_combined = get_image_path(PLOT_PATHS['cropping_combined'], district)
+    if img_combined:
+        st.image(img_combined, caption=f"Cropping Dynamics - {district}", use_container_width=True)
     else:
-        st.warning("Trend image not found.")
+        st.warning("Cropping dynamics image not found.")
 
     st.divider()
 
-    # 2. Cropping pattern composition (JPEG)
-    st.header("2. Cropping Pattern Composition")
-    img_2 = get_image_path(PLOT_PATHS['stack_plot'], district)
-    if img_2:
-        st.image(img_2, caption=f"Cropping Pattern Composition - {district}", use_container_width=True)
+    # 2. Total Foodgrains: Area, Production, & Yield Trends
+    st.header("2. Total Foodgrains: Area, Production, & Yield Trends")
+    img_apy = get_image_path(PLOT_PATHS['apy_trends'], district)
+    if img_apy:
+        st.image(img_apy, caption=f"Total Foodgrains APY Trends - {district}", use_container_width=True)
     else:
-        st.warning("Composition image not found.")
+        st.warning("Total Foodgrains APY Trends image not found.")
 
     st.divider()
 
@@ -245,67 +249,122 @@ elif st.session_state.view_mode == "District Analysis":
 
     st.divider()
 
-    # 6. Distance hotspot statistics (Excel)
-    st.header("6. Distance Hotspot Statistics")
-    df_6 = load_excel_sheet(PLOT_PATHS['dist_hotspot_stats'], district)
-    if df_6 is not None:
-        st.dataframe(df_6, hide_index=True, use_container_width=True)
+    # 6. Distribution Histograms
+    st.header("6. Distribution Histograms")
+    selected_6 = st.radio("Select cropping type (Histograms):", list(CROPPING_OPTIONS.keys()), horizontal=True, key="radio_6")
+    img_6 = get_image_path(PLOT_PATHS['dist_histo'], district, get_folder_name(CROPPING_OPTIONS[selected_6]))
+    if img_6:
+        st.image(img_6, use_container_width=True)
     else:
-        st.warning("Distance hotspot statistics not found.")
+        st.warning(f"Histogram for {selected_6} not found.")
 
     st.divider()
 
-    # 7. Distribution Histograms
-    st.header("7. Distribution Histograms")
-    selected_7 = st.radio("Select cropping type (Histograms):", list(CROPPING_OPTIONS.keys()), horizontal=True, key="radio_7")
-    img_7 = get_image_path(PLOT_PATHS['dist_histo'], district, CROPPING_OPTIONS[selected_7])
+    # 7. Hotspots Color by Distance
+    st.header("7. Hotspots Color by Distance")
+    selected_7 = st.radio("Select cropping type (Color by Location):", list(CROPPING_OPTIONS.keys()), horizontal=True, key="radio_7")
+    img_7 = get_image_path(PLOT_PATHS['color_location'], district, get_folder_name(CROPPING_OPTIONS[selected_7]))
     if img_7:
         st.image(img_7, use_container_width=True)
+        
+        # Download District Stats from Section 5's original data
+        df_stats = load_excel_sheet(PLOT_PATHS['dist_hotspot_stats'], district)
+        if df_stats is not None:
+            csv = df_stats.to_csv(index=False).encode('utf-8')
+            st.download_button(
+                label=f"📥 Download {district} Hotspot Statistics (CSV)",
+                data=csv,
+                file_name=f"{district}_hotspot_distance_stats.csv",
+                mime="text/csv",
+                key="download_hotspot_stats"
+            )
     else:
-        st.warning(f"Histogram for {selected_7} not found.")
+        st.warning(f"Color map for {selected_7} not found.")
 
     st.divider()
 
-    # 8. Hotspots color by distance
-    st.header("8. Hotspots Color by Distance")
-    selected_8 = st.radio("Select cropping type (Color by Location):", list(CROPPING_OPTIONS.keys()), horizontal=True, key="radio_8")
-    img_8 = get_image_path(PLOT_PATHS['color_location'], district, CROPPING_OPTIONS[selected_8])
+    # 8. Scatter Plots
+    st.header("8. Scatter Plots")
+    selected_8 = st.radio("Select cropping type (Scatter Plots):", list(CROPPING_OPTIONS.keys()), horizontal=True, key="radio_8")
+    img_8 = get_image_path(PLOT_PATHS['scatter'], district, get_folder_name(CROPPING_OPTIONS[selected_8]))
     if img_8:
         st.image(img_8, use_container_width=True)
     else:
-        st.warning(f"Color map for {selected_8} not found.")
+        st.warning(f"Scatter plot for {selected_8} not found.")
+
+    # Market Proximity Statistical Analysis
+    st.markdown("### Market Proximity Statistical Analysis")
+    stats_file = os.path.join(PLOT_PATHS['scatter_stats'], f"{CROPPING_OPTIONS[selected_8]}.xlsx")
+    if os.path.exists(stats_file):
+        try:
+            df_stats = pd.read_excel(stats_file)
+            df_district_stats = df_stats[df_stats['District'] == district]
+            
+            if not df_district_stats.empty:
+                stats_text = "═══════════════════════════════════════════════════════════\n"
+                stats_text += "Statistical Significance & Trend Analysis\n"
+                stats_text += "───────────────────────────────────────────────────────────\n"
+                
+                # Sort by period to ensure 2017-2020 comes first if possible
+                df_district_stats = df_district_stats.sort_values('Period')
+                
+                for _, row in df_district_stats.iterrows():
+                    period = row['Period']
+                    p_val = row['P_value']
+                    r_sq = row['R_squared']
+                    slope = row['Slope']
+                    
+                    sig = "✓ Significant" if p_val < 0.05 else "✗ Not significant"
+                    trend = "(Decreases with distance)" if slope < 0 else "(Increases with distance)"
+                    
+                    stats_text += f"{period}:\n"
+                    stats_text += f"• P-value: {p_val:.4f} {sig}\n"
+                    stats_text += f"• R-squared: {r_sq:.2f}\n"
+                    stats_text += f"• Slope: {slope:.2f} {trend}\n"
+                
+                stats_text += "═══════════════════════════════════════════════════════════"
+                st.code(stats_text, language='text')
+            else:
+                st.info(f"No statistical data found for {district} in this category.")
+        except Exception as e:
+            st.error(f"Error loading statistical data: {e}")
+    else:
+        st.warning("Statistical analysis files not found.")
 
     st.divider()
 
-    # 9. Scatter plots
-    st.header("9. Scatter Plots")
-    selected_9 = st.radio("Select cropping type (Scatter Plots):", list(CROPPING_OPTIONS.keys()), horizontal=True, key="radio_9")
-    img_9 = get_image_path(PLOT_PATHS['scatter'], district, CROPPING_OPTIONS[selected_9])
-    if img_9:
-        st.image(img_9, use_container_width=True)
+    # 9. Land Use Transition Statistics
+    st.header("9. Land Use Transition Statistics")
+
+    df_9 = load_excel_sheet(PLOT_PATHS['sankey_stats'], district)
+
+    if df_9 is not None:
+        # Helper to get value for metrics safely (handles commas and % signs)
+        def get_metric_value(metric_name):
+            try:
+                # Find row where metric contains the name
+                mask = df_9['Metric'].str.contains(metric_name, case=False, na=False)
+                val_raw = df_9[mask]['Value'].values
+                if len(val_raw) > 0:
+                    v = str(val_raw[0]).replace(',', '').replace('%', '').strip()
+                    return float(v)
+            except:
+                pass
+            return 0.0
+
+        total_area = get_metric_value("Total Area")
+        pct_changed = get_metric_value("Percentage Changed")
+
+        # Summary Cards (Total Area and Percentage Changed only)
+        c1, c2 = st.columns(2)
+        c1.metric("Total Area (Acres)", f"{total_area:,.0f}")
+        c2.metric("Percentage Changed (%)", f"{pct_changed:.1f}%")
+
+        # Simple and robust table display
+        st.dataframe(
+            df_9,
+            hide_index=True,
+            use_container_width=True
+        )
     else:
-        st.warning(f"Scatter plot for {selected_9} not found.")
-
-    st.divider()
-
-    # 10. Sankey plot (HTML)
-    st.header("10. Sankey Plot")
-    sankey_file = os.path.join(PLOT_PATHS['sankey'], f"{district}.html")
-    if os.path.exists(sankey_file):
-        with open(sankey_file, 'r', encoding='utf-8') as f:
-            html_content = f.read()
-        st.components.v1.html(html_content, height=600, scrolling=True)
-    else:
-        st.warning("Sankey plot HTML not found.")
-
-    st.divider()
-
-    # 11. Sankey stats (Excel)
-    st.header("11. Sankey Statistics")
-
-    # Load Summary Table (Metric and Value columns)
-    df_11_summary = load_excel_sheet(PLOT_PATHS['sankey_stats'], district)
-    if df_11_summary is not None:
-        st.dataframe(df_11_summary, hide_index=True, use_container_width=True)
-    else:
-        st.warning(f"Sankey statistics for {district} not found.")
+        st.warning(f"Transition statistics for {district} not found.")
