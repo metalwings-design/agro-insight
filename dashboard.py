@@ -30,6 +30,7 @@ PLOT_PATHS = {
     'scatter_stats': os.path.join(BASE_PATH, 'plot_12_scatter_stats'),
     'sankey': os.path.join(BASE_PATH, 'plot_13_sankey'),
     'sankey_stats': os.path.join(BASE_PATH, 'plot_14_sankey_stats', 'sankey_stats.xlsx'),
+    'upag_crops': os.path.join(BASE_PATH, 'plot_15_upag_data'),
 }
 
 CROPPING_OPTIONS = {
@@ -146,15 +147,16 @@ if st.session_state.view_mode == "Home":
     ### Understanding sections:
     
     1. **Cropping dynamics (Trend & Composition):** It shows overall cropping intensity change and how different cropping types are distributed across time periods.
-    2. **Total Foodgrains APY Trends:** Displays three stacked line plots (Area, Production, Yield) for Total Foodgrains across the analyzed years to show district-level agricultural productivity. (source = UPAG data)
-    3. **Distance to market CDF:** Displays Cumulative Distribution Function (CDF) plots for distance to market by cropping type.
-    4. **Cropping intensity tables:** Detail numerical table showing contribution of cropping type in district and cropping intensity across period. It will help to understand change in cropping proportion by type across period.
-    5. **Density hotspot analysis:** Plot identify area of high concentration for each cropping type. **Red areas** indicate high density cluster where particular cropping pattern is dominant. Four separate plots by cropping types are available for analysis. It also shows river and water bodies, market yard, APMC mandi across all district.
-    6. **Area coverage:** table represents total pixel coverage for each cropping type. It shows structural change took place across two time period.
-    7. **Distance to market histogram:** It shows distribution of distances from hotspot cluster to nearest markets. It helps to understand whether cropping intensification closer or away from market.
-    8. **Hotspot color by distance:** This plot shows hotspot location representing top 15% density hotspots across two time periods. Colors represent distance to market. Green color represent hotspots are closer to market, red color represents hotspots away from market. Includes download option for hotspot distance statistics.
-    9. **Scatter plot:** It examine relations between distance to market and cropping intensity.
-    10. **Land Use Transition Statistics:** Interactive table and summary metrics showing land use transition between cropping types, including total area changed, stable area, and percentage change across periods based on sankey plot statistics.
+    2. **Cropping intensity tables:** Detail numerical table showing contribution of cropping type in district and cropping intensity across period. It will help to understand change in cropping proportion by type across period.
+    3. **Total Foodgrains APY Trends:** Displays three stacked line plots (Area, Production, Yield) for Total Foodgrains across the analyzed years to show district-level agricultural productivity. (source = UPAG data)
+    4. **Distance to market CDF:** Displays Cumulative Distribution Function (CDF) plots for distance to market by cropping type.
+    5. **Crops production:** This section displays crops production in the district (in lakh tonnes) for various years. (source = UPAG data)
+    6. **Density hotspot analysis:** Plot identify area of high concentration for each cropping type. **Red areas** indicate high density cluster where particular cropping pattern is dominant. Four separate plots by cropping types are available for analysis. It also shows river and water bodies, market yard, APMC mandi across all district.
+    7. **Area coverage:** table represents total pixel coverage for each cropping type. It shows structural change took place across two time period.
+    8. **Distance to market histogram:** It shows distribution of distances from hotspot cluster to nearest markets. It helps to understand whether cropping intensification closer or away from market.
+    9. **Hotspot color by distance:** This plot shows hotspot location representing top 15% density hotspots across two time periods. Colors represent distance to market. Green color represent hotspots are closer to market, red color represents hotspots away from market. Includes download option for hotspot distance statistics.
+    10. **Scatter plot:** It examine relations between distance to market and cropping intensity.
+    11. **Land Use Transition Statistics:** Interactive table and summary metrics showing land use transition between cropping types, including total area changed, stable area, and percentage change across periods based on sankey plot statistics.
     """)
 
 elif st.session_state.view_mode == "About Me":
@@ -202,28 +204,8 @@ elif st.session_state.view_mode == "District Analysis":
 
     st.divider()
 
-    # 2. Total Foodgrains: Area, Production, & Yield Trends
-    st.header("2. Total Foodgrains: Area, Production, & Yield Trends")
-    img_apy = get_image_path(PLOT_PATHS['apy_trends'], district)
-    if img_apy:
-        st.image(img_apy, caption=f"Total Foodgrains APY Trends - {district}", use_container_width=True)
-    else:
-        st.warning("Total Foodgrains APY Trends image not found.")
-
-    st.divider()
-
-    # 3. Distance to market CDF
-    st.header("3. Distance to Market CDF")
-    img_3 = get_image_path(PLOT_PATHS['cdf_plots'], district)
-    if img_3:
-        st.image(img_3, caption=f"Distance to Market CDF - {district}", use_container_width=True)
-    else:
-        st.warning(f"CDF plot for {district} not found.")
-
-    st.divider()
-
-    # 4. Cropping intensity tables (Excel)
-    st.header("4. Cropping Intensity Tables")
+    # 2. Cropping intensity tables (Excel)
+    st.header("2. Cropping Intensity Tables")
     df_3 = load_excel_sheet(PLOT_PATHS['intensity_table'], district)
     if df_3 is not None:
         st.dataframe(df_3, hide_index=True, use_container_width=True)
@@ -232,8 +214,50 @@ elif st.session_state.view_mode == "District Analysis":
 
     st.divider()
 
-    # 5. Density Hotspots
-    st.header("5. Density Hotspots")
+    # 3. Total Foodgrains: Area, Production, & Yield Trends
+    st.header("3. Total Foodgrains: Area, Production, & Yield Trends")
+    img_apy = get_image_path(PLOT_PATHS['apy_trends'], district)
+    if img_apy:
+        st.image(img_apy, caption=f"Total Foodgrains APY Trends - {district}", use_container_width=True)
+    else:
+        st.warning("Total Foodgrains APY Trends image not found.")
+
+    st.divider()
+
+    # 4. Distance to market CDF
+    st.header("4. Distance to Market CDF")
+    img_3 = get_image_path(PLOT_PATHS['cdf_plots'], district)
+    if img_3:
+        st.image(img_3, caption=f"Distance to Market CDF - {district}", use_container_width=True)
+    else:
+        st.warning(f"CDF plot for {district} not found.")
+
+    st.divider()
+
+    # 5. Crops Production (UPAG Data)
+    st.header("5. Crops Production")
+    st.markdown("This plot represents crop production (in lakh tonnes) in the district.")
+    
+    # Get available years dynamically
+    try:
+        available_years = sorted([d for d in os.listdir(PLOT_PATHS['upag_crops']) if os.path.isdir(os.path.join(PLOT_PATHS['upag_crops'], d))])
+    except Exception:
+        available_years = []
+
+    if available_years:
+        selected_year = st.radio("Select Year:", available_years, horizontal=True, key="radio_upag_year")
+        img_upag = get_image_path(PLOT_PATHS['upag_crops'], district, selected_year)
+        if img_upag:
+            st.image(img_upag, caption=f"Crops Production ({selected_year}) - {district}", use_container_width=True)
+        else:
+            st.warning(f"Crops production plot for {district} in {selected_year} not found.")
+    else:
+        st.warning("Crops production data not found.")
+
+    st.divider()
+
+    # 6. Density Hotspots
+    st.header("6. Density Hotspots")
     selected_4 = st.radio("Select cropping type (Hotspots):", list(CROPPING_OPTIONS.keys()), horizontal=True, key="radio_4")
 
     hotspot_map = {
@@ -251,8 +275,8 @@ elif st.session_state.view_mode == "District Analysis":
 
     st.divider()
 
-    # 6. Area coverage (pixel) (Excel)
-    st.header("6. Area Coverage (Pixel)")
+    # 7. Area coverage (pixel) (Excel)
+    st.header("7. Area Coverage (Pixel)")
     df_5 = load_excel_sheet(PLOT_PATHS['dist_cover'], district)
     if df_5 is not None:
         st.dataframe(df_5, hide_index=True, use_container_width=True)
@@ -261,8 +285,8 @@ elif st.session_state.view_mode == "District Analysis":
 
     st.divider()
 
-    # 7. Distribution Histograms
-    st.header("7. Distribution Histograms")
+    # 8. Distribution Histograms
+    st.header("8. Distribution Histograms")
     selected_6 = st.radio("Select cropping type (Histograms):", list(CROPPING_OPTIONS.keys()), horizontal=True, key="radio_6")
     img_6 = get_image_path(PLOT_PATHS['dist_histo'], district, get_folder_name(CROPPING_OPTIONS[selected_6]))
     if img_6:
@@ -272,8 +296,8 @@ elif st.session_state.view_mode == "District Analysis":
 
     st.divider()
 
-    # 8. Hotspots Color by Distance
-    st.header("8. Hotspots Color by Distance")
+    # 9. Hotspots Color by Distance
+    st.header("9. Hotspots Color by Distance")
     selected_7 = st.radio("Select cropping type (Color by Location):", list(CROPPING_OPTIONS.keys()), horizontal=True, key="radio_7")
     img_7 = get_image_path(PLOT_PATHS['color_location'], district, get_folder_name(CROPPING_OPTIONS[selected_7]))
     if img_7:
@@ -295,8 +319,8 @@ elif st.session_state.view_mode == "District Analysis":
 
     st.divider()
 
-    # 9. Scatter Plots
-    st.header("9. Scatter Plots")
+    # 10. Scatter Plots
+    st.header("10. Scatter Plots")
     selected_8 = st.radio("Select cropping type (Scatter Plots):", list(CROPPING_OPTIONS.keys()), horizontal=True, key="radio_8")
     img_8 = get_image_path(PLOT_PATHS['scatter'], district, get_folder_name(CROPPING_OPTIONS[selected_8]))
     if img_8:
@@ -345,8 +369,8 @@ elif st.session_state.view_mode == "District Analysis":
 
     st.divider()
 
-    # 10. Land Use Transition Statistics
-    st.header("10. Land Use Transition Statistics")
+    # 11. Land Use Transition Statistics
+    st.header("11. Land Use Transition Statistics")
 
     # Sankey Plot (HTML)
     sankey_path = os.path.join(PLOT_PATHS['sankey'], f"{district}.html")
