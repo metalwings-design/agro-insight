@@ -12,7 +12,7 @@ st.set_page_config(
 )
 
 # Constants & Paths
-BASE_PATH = r'C:\Users\user\Documents\freelance\core foss dashboard'
+BASE_PATH = os.path.dirname(os.path.abspath(__file__))
 PLOT_PATHS = {
     'cropping_combined': os.path.join(BASE_PATH, 'plot_1_cropping_combined'),
     'apy_trends': os.path.join(BASE_PATH, 'plot_1.1_apy'),
