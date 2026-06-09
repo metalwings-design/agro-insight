@@ -94,6 +94,54 @@ To understand the underlying methodology or to replicate the analysis and automa
 * **`replicate/code3_replicate.py`**: The core execution script. Run this file to ingest the pre-processed data, execute the analytical pipelines, and automatically generate the results, metrics, and plots described below.
 
 ---
+---
+
+## Replicating Analysis for Other States
+
+The analytical framework developed for this dashboard is conceptually transferable to any state. However, due to variations in regional data structures and spatial infrastructure, scaling requires localized data preparation. There is no direct automated shortcut; a researcher must manually source and clean the datasets for each target state.
+
+### Required Replication Workflow
+
+To reproduce these analytics and visualizations for a new state, execute the following manual and programmatic steps:
+
+1. **Sourcing Spatial Vector Layers:** * Download the official administrative boundary `.geojson` for the target state and slice/filter it down to the district level.
+   * Source regional river network shapefiles/GeoJSONs and clip them to the state's geographic bounding box.
+
+2. **Compiling Attribute Data:**
+   * Extract corresponding district-level production statistics (`Area`, `Production`, `Yield`) from the UPAG Portal for the target fiscal years.
+   * Compile and clean the APMC mandi location dataset. Ensure all market centroids are accurately geocoded (Latitude/Longitude).
+
+3. **Data Cleaning & String Alignment:**
+   * Manually verify that district name strings in the UPAG CSV match the district name attributes inside the `.geojson` properties exactly to prevent null values during joins.
+
+4. **Regenerating Visualizations:**
+   * Update the spatial queries and data paths within the processing pipeline (`replicate/code3_replicate.py`) to point to your new localized data vectors to calculate the new distance matrices, CDF curves, and hexagonal density hotspots.
+
+---
+
+## How to Run the Dashboard Locally
+
+Since this application is built entirely on **Streamlit**, it does not require a split frontend/backend architecture (such as npm or uvicorn). The entire dashboard serves directly from the primary Python file.
+
+### Prerequisites
+Ensure you have Python 3.9+ installed along with the required spatial and web dependencies listed in `requirements.txt` (including `streamlit`, `geopandas`, `pandas`, `numpy`, and `plotly`).
+
+### Execution Steps
+
+1. **Clone the Repository:**
+   ```bash
+   git clone [https://github.com/your-username/your-repo-name.git](https://github.com/your-username/your-repo-name.git)
+   cd your-repo-name
+
+2. **Install Dependencies:**
+   ```bash
+   pip install -r requirements.txt
+
+3. **Launch the Application:**
+   ```bash
+   streamlit run dashboard.py
+   
+---
 
 **How to Cite:**
 
