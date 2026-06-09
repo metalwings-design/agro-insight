@@ -129,8 +129,8 @@ Ensure you have Python 3.9+ installed along with the required spatial and web de
 
 1. **Clone the Repository:**
    ```bash
-   git clone [https://github.com/your-username/your-repo-name.git](https://github.com/your-username/your-repo-name.git)
-   cd your-repo-name
+   git clone [https://github.com/metalwings-design/agro-insight.git](https://github.com/metalwings-design/agro-insight.git)
+   cd agro-insight
 
 2. **Install Dependencies:**
    ```bash
