@@ -56,6 +56,35 @@ Where:
 ### 4. Distance to Market (CDF Analysis)
 The Cumulative Distribution Function (CDF) plot models the spatial distribution of cropping patterns relative to Agricultural Produce Market Committee (APMC) infrastructure.
 
+### 5. Distance to Market Histogram (Market Accessibility Profiling)
+This module generates a statistical accessibility profile of the selected district by binning high-density agricultural clusters into specific distance brackets from market infrastructure.
+
+* **Market-Led Intensification:** A left-skewed distribution indicates agricultural intensification is clustered heavily around existing infrastructure.
+* **Temporal Tracking:** Longitudinal shifts in the histogram profile over successive years provide empirical evidence of structural economic and logistical shifts within the farming landscape.
+
+### 6. Hotspots Color by Distance (Spatial Econometric Mapping)
+A spatial visualization layer mapping the heterogeneity of market connectivity across district geographies. The system applies a Red-Yellow-Green choropleth gradient to hotspot centroids to isolate the distance decay effect on agricultural potential.
+
+| Classification | Vector Layer Criteria | Economic Implication |
+| :--- | :--- | :--- |
+| **Dark Red Hotspots** | Top 15% pixel density; high distance to market yard | High agricultural productivity constrained by low economic connectivity. |
+| **Green Clusters** | Top 15% pixel density; low distance to market yard | **Efficiency Zones** characterized by optimal infrastructural and market access. |
+
+### 7. Density Hotspot Analysis
+This component identifies geographic clusters where specific cropping types exhibit high spatial concentration.
+
+* **Grid Specifications:** The district bounding box is tessellated into a hexagonal grid consisting of 50 hexagons across the spatial extent.
+* **Relative Thresholding Method:** To maintain cross-district scalability regardless of varying geographic areas, the system employs a relative threshold rather than a fixed pixel count. Hexagons falling within the top 15% of pixel density for a given crop type are classified as active hotspots.
+* **Visualization:** High-density clusters are rendered in red to illustrate spatial agglomeration patterns.
+
+### 8. Land Use Transition Statistics (Sankey Diagram)
+This module tracks longitudinal, pixel-level land cover transitions between two target periods.
+
+* **Visualization Engine:** A Sankey Diagram maps the directional flow of land allocation.
+* **Analytical Purpose:** Quantifies the conversion velocity of land moving from lower-intensity vegetative states to higher-intensity multi-cropping agricultural frameworks.
+
+---
+
 **How to Cite:**
 
 If you use this dashboard or data in your research, please cite:
