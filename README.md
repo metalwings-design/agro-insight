@@ -94,7 +94,6 @@ To understand the underlying methodology or to replicate the analysis and automa
 * **`replicate/code3_replicate.py`**: The core execution script. Run this file to ingest the pre-processed data, execute the analytical pipelines, and automatically generate the results, metrics, and plots described below.
 
 ---
----
 
 ## Replicating Analysis for Other States
 
