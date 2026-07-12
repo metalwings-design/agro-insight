@@ -17,19 +17,19 @@ PLOT_PATHS = {
     'cropping_combined': os.path.join(BASE_PATH, 'plot_1_cropping_combined'),
     'apy_trends': os.path.join(BASE_PATH, 'plot_1.1_apy'),
     'cdf_plots': os.path.join(BASE_PATH, 'plot_1.2_cdf'),
-    'intensity_table': os.path.join(BASE_PATH, 'plot_3_table_intensity', 'table_intensity.xlsx'),
+    'intensity_dir': os.path.join(BASE_PATH, 'plot_3_table_intensity', 'files'),
     'hotspot_4': os.path.join(BASE_PATH, 'plot_4_value_8'),
     'hotspot_5': os.path.join(BASE_PATH, 'plot_5_value_9'),
     'hotspot_6': os.path.join(BASE_PATH, 'plot_6_value_10'),
     'hotspot_7': os.path.join(BASE_PATH, 'plot_7_value_11'),
     'dist_cover': os.path.join(BASE_PATH, 'plot_8_dist_cover', 'district_cover.xlsx'),
-    'dist_hotspot_stats': os.path.join(BASE_PATH, 'plot_9_distance_hotspot', 'distance_hotspot_modified.xlsx'),
+    'dist_hotspot_stats': os.path.join(BASE_PATH, 'plot_9_distance_hotspot', 'files'),
     'dist_histo': os.path.join(BASE_PATH, 'plot_10_dist_histo'),
     'color_location': os.path.join(BASE_PATH, 'plot_11_color_by_location'),
     'scatter': os.path.join(BASE_PATH, 'plot_12_scatter'),
     'scatter_stats': os.path.join(BASE_PATH, 'plot_12_scatter_stats'),
     'sankey': os.path.join(BASE_PATH, 'plot_13_sankey'),
-    'sankey_stats': os.path.join(BASE_PATH, 'plot_14_sankey_stats', 'sankey_stats.xlsx'),
+    'sankey_stats': os.path.join(BASE_PATH, 'plot_14_sankey_stats'),
     'upag_crops': os.path.join(BASE_PATH, 'plot_15_upag_data'),
 }
 
@@ -175,15 +175,22 @@ elif st.session_state.view_mode == "District Analysis":
             st.rerun()
 
     def get_image_path(base_folder, district, subfolder=None):
-        """Find image with any common extension"""
+        """Find image with any common extension, handling spelling variants like Gondia/Gondiya"""
         extensions = ['jpeg', 'jpg', 'png']
+        dist_variants = [district]
+        if district == "Gondiya":
+            dist_variants.append("Gondia")
+        elif district == "Gondia":
+            dist_variants.append("Gondiya")
+            
         for ext in extensions:
-            if subfolder:
-                path = os.path.join(base_folder, subfolder, f"{district}.{ext}")
-            else:
-                path = os.path.join(base_folder, f"{district}.{ext}")
-            if os.path.exists(path):
-                return path
+            for dist in dist_variants:
+                if subfolder:
+                    path = os.path.join(base_folder, subfolder, f"{dist}.{ext}")
+                else:
+                    path = os.path.join(base_folder, f"{dist}.{ext}")
+                if os.path.exists(path):
+                    return path
         return None
 
     # District Data Display
@@ -234,8 +241,13 @@ elif st.session_state.view_mode == "District Analysis":
         st.warning("Cropping dynamics image not found.")
 
     # Load intensity table data for download
-    df_intensity = load_excel_sheet(PLOT_PATHS['intensity_table'], district)
-    
+    # NEW OPTIMIZED CSV READING METHOD
+    district_csv_path = os.path.join(PLOT_PATHS['intensity_dir'], f"{district}.csv")
+    if os.path.exists(district_csv_path):
+        df_intensity = pd.read_csv(district_csv_path)
+    else:
+        df_intensity = None
+
     if df_intensity is not None:
         csv_intensity = df_intensity.to_csv(index=False).encode('utf-8')
         st.download_button(
@@ -280,7 +292,16 @@ elif st.session_state.view_mode == "District Analysis":
         st.image(img_7, use_container_width=True)
         
         # Download District Stats from Section 5's original data
-        df_stats = load_excel_sheet(PLOT_PATHS['dist_hotspot_stats'], district)
+        # Construct path directly to the individual district CSV file
+        district_csv_path = os.path.join(PLOT_PATHS['dist_hotspot_stats'], f"{district}.csv")
+        
+        # Verify file presence before reading to prevent system crash
+        if os.path.exists(district_csv_path):
+            df_stats = pd.read_csv(district_csv_path)
+        else:
+            df_stats = None
+
+        # Download District Stats from Section 5's original data
         if df_stats is not None:
             csv = df_stats.to_csv(index=False).encode('utf-8')
             st.download_button(
@@ -329,7 +350,14 @@ elif st.session_state.view_mode == "District Analysis":
     else:
         st.warning(f"Sankey plot (HTML) for {district} not found.")
 
-    df_9 = load_excel_sheet(PLOT_PATHS['sankey_stats'], district)
+    # Construct path directly to the base summary CSV inside files_sankey
+    district_csv_sankey = os.path.join(PLOT_PATHS['sankey_stats'], 'files_sankey', f"{district}.csv")
+
+    # Verify file presence before reading to prevent a system crash
+    if os.path.exists(district_csv_sankey):
+        df_9 = pd.read_csv(district_csv_sankey)
+    else:
+        df_9 = None
 
     if df_9 is not None:
         # Helper to get value for metrics safely (handles commas and % signs)

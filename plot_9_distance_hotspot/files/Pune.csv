@@ -1,0 +1,21 @@
+Cropping Layer,Metric,2017-2020,2022-2025
+Single Kharif,Number of Hotspot Clusters,225.0,225.0
+Single Kharif,Minimum Distance (km),14.51,14.56
+Single Kharif,Maximum Distance (km),135.29,132.4
+Single Kharif,Average Distance (km),60.39,60.62
+Single Kharif,Std Deviation (km),23.0,26.29
+Single Non-Kharif,Number of Hotspot Clusters,189.0,223.0
+Single Non-Kharif,Minimum Distance (km),29.45,14.82
+Single Non-Kharif,Maximum Distance (km),142.59,110.5
+Single Non-Kharif,Average Distance (km),67.16,59.59
+Single Non-Kharif,Std Deviation (km),21.4,17.49
+Double Cropping,Number of Hotspot Clusters,224.0,223.0
+Double Cropping,Minimum Distance (km),17.49,16.62
+Double Cropping,Maximum Distance (km),146.43,142.22
+Double Cropping,Average Distance (km),76.73,76.12
+Double Cropping,Std Deviation (km),33.02,32.63
+Triple Cropping,Number of Hotspot Clusters,222.0,223.0
+Triple Cropping,Minimum Distance (km),18.55,18.51
+Triple Cropping,Maximum Distance (km),146.51,147.1
+Triple Cropping,Average Distance (km),68.69,66.46
+Triple Cropping,Std Deviation (km),24.57,26.12

@@ -1,3 +1,68 @@
+import os
+import pandas as pd
+import matplotlib.pyplot as plt
+import warnings
+warnings.filterwarnings('ignore')
+
+# ==============================================================================
+#                         GLOBAL CONFIGURATION SETTINGS
+# ==============================================================================
+# Base project directory path
+BASE_DIR = r'C:\Users\user\Documents\freelance\core foss dashboard'
+
+# Core Input Files
+MHDATA_EXCEL = os.path.join(BASE_DIR, 'mhdata.xlsx')
+WATER_BODIES_GEOJSON = os.path.join(BASE_DIR, 'water_bodies.geojson')
+
+# Input Directories
+SHRUG_DISTRICT_BOUNDARIES_DIR = os.path.join(BASE_DIR, 'shrug updated dist mh seperate')
+BASELINE_MODE_DIR = os.path.join(BASE_DIR, 'baseline_mode_2017_20')
+RECENT_MODE_DIR = os.path.join(BASE_DIR, 'recent_mode_2022_25')
+WATER_DIR = os.path.join(BASE_DIR, 'core_state_rivers_dist')
+
+# Yearly District Output TIF Directories
+TIF_DIRS = {
+    "2017-18": os.path.join(BASE_DIR, 'district_outputs_17_18'),
+    "2018-19": os.path.join(BASE_DIR, 'district_outputs_18_19'),
+    "2019-20": os.path.join(BASE_DIR, 'district_outputs_19_20'),
+    "2020-21": os.path.join(BASE_DIR, 'district_outputs_20_21'),
+    "2021-22": os.path.join(BASE_DIR, 'district_outputs_21_22'),
+    "2022-23": os.path.join(BASE_DIR, 'district_outputs_22_23'),
+    "2023-24": os.path.join(BASE_DIR, 'district_outputs_23_24'),
+    "2024-25": os.path.join(BASE_DIR, 'district_outputs_24_25')
+}
+
+# Output Directories for Plots & Stats
+PLOT_APY_DIR = os.path.join(BASE_DIR, 'plot_1.1_apy')
+PLOT_UPAG_DATA_DIR = os.path.join(BASE_DIR, 'plot_15_upag_data')
+PLOT_CROPPING_COMBINED_DIR = os.path.join(BASE_DIR, 'plot_1.1_cropping_combined')
+PLOT_TABLE_INTENSITY_DIR = os.path.join(BASE_DIR, 'plot_3_table_intensity')
+PLOT_CDF_DIR = os.path.join(BASE_DIR, 'plot_1.2_cdf')
+PLOT_DISTANCE_HOTSPOT_DIR = os.path.join(BASE_DIR, 'plot_9_distance_hotspot')
+PLOT_HISTOGRAM_DIR = os.path.join(BASE_DIR, 'plot_10_dist_histo')
+PLOT_COLOR_LOCATION_DIR = os.path.join(BASE_DIR, 'plot_11_color_by_location')
+PLOT_SANKEY_STATS_DIR = os.path.join(BASE_DIR, 'plot_14_sankey_stats')
+PLOT_SANKEY_DIR = os.path.join(BASE_DIR, 'plot_13_sankey')
+
+# Hotspot density/value folder mapping for Section 7
+VAL_FOLDERS = {
+    8: os.path.join(BASE_DIR, 'plot_4_value_8'),
+    9: os.path.join(BASE_DIR, 'plot_5_value_9'),
+    10: os.path.join(BASE_DIR, 'plot_6_value_10'),
+    11: os.path.join(BASE_DIR, 'plot_7_value_11')
+}
+
+# Constants and Mapping Variables
+YEARS_LIST = ["2017-18", "2018-19", "2019-20", "2020-21", "2021-22", "2022-23", "2023-24", "2024-25"]
+SKIP_DISTRICTS = ['Mumbai', 'Mumbai Suburban']
+
+CROPPING_CLASSES = {
+    8: "Single Kharif",
+    9: "Single Non-Kharif",
+    10: "Double Cropping",
+    11: "Triple Cropping"
+}
+# ==============================================================================
 
 ####################################################
 
@@ -5,17 +70,10 @@
 
 #####################################################
 
-
-import os
-import pandas as pd
-import matplotlib.pyplot as plt
-import warnings
-warnings.filterwarnings('ignore')
-
 # --- Settings ---
-FILE_PATH = 'mhdata.xlsx'
+FILE_PATH = MHDATA_EXCEL
 SHEET_NAME = 'upag'
-OUTPUT_FOLDER = 'plot_1.1_apy'
+OUTPUT_FOLDER = PLOT_APY_DIR
 
 def generate_plots():
     # 1. Load Data
@@ -125,8 +183,8 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # Configuration
-input_file = r'C:\Users\user\Documents\freelance\core foss dashboard\mhdata.xlsx'
-output_dir = 'plot_15_upag_data'
+input_file = MHDATA_EXCEL
+output_dir = PLOT_UPAG_DATA_DIR
 os.makedirs(output_dir, exist_ok=True)
 
 # Read data
@@ -258,22 +316,13 @@ import matplotlib.pyplot as plt
 from rasterio.mask import mask
 
 # 1. Configuration
-boundary_dir = r'C:\Users\user\Documents\freelance\core foss dashboard\shrug updated dist mh seperate'
-output_dir = 'plot_1.1_cropping_combined'
+boundary_dir = SHRUG_DISTRICT_BOUNDARIES_DIR
+output_dir = PLOT_CROPPING_COMBINED_DIR
 os.makedirs(output_dir, exist_ok=True)
 
-years = ["2017-18", "2018-19", "2019-20", "2020-21", "2021-22", "2022-23", "2023-24", "2024-25"]
+years = YEARS_LIST
 
-tif_dirs = {
-    "2017-18": r'C:\Users\user\Documents\freelance\core foss dashboard\district_outputs_17_18',
-    "2018-19": r'C:\Users\user\Documents\freelance\core foss dashboard\district_outputs_18_19',
-    "2019-20": r'C:\Users\user\Documents\freelance\core foss dashboard\district_outputs_19_20',
-    "2020-21": r'C:\Users\user\Documents\freelance\core foss dashboard\district_outputs_20_21',
-    "2021-22": r'C:\Users\user\Documents\freelance\core foss dashboard\district_outputs_21_22',
-    "2022-23": r'C:\Users\user\Documents\freelance\core foss dashboard\district_outputs_22_23',
-    "2023-24": r'C:\Users\user\Documents\freelance\core foss dashboard\district_outputs_23_24',
-    "2024-25": r'C:\Users\user\Documents\freelance\core foss dashboard\district_outputs_24_25'
-}
+tif_dirs = TIF_DIRS
 
 def calculate_intensity(tif_path, gdf_boundary):
     """Calculate cropping intensity"""
@@ -402,22 +451,13 @@ import pandas as pd
 from rasterio.mask import mask
 
 # 1. Configuration
-boundary_dir = r'C:\Users\user\Documents\freelance\core foss dashboard\shrug updated dist mh seperate'
-output_dir = 'plot_3_table_intensity'
+boundary_dir = SHRUG_DISTRICT_BOUNDARIES_DIR
+output_dir = PLOT_TABLE_INTENSITY_DIR
 os.makedirs(output_dir, exist_ok=True)
 excel_path = os.path.join(output_dir, 'table_intensity.xlsx')
 
-years = ["2017-18", "2018-19", "2019-20", "2020-21", "2021-22", "2022-23", "2023-24", "2024-25"]
-tif_dirs = {
-    "2017-18": r'C:\Users\user\Documents\freelance\core foss dashboard\district_outputs_17_18',
-    "2018-19": r'C:\Users\user\Documents\freelance\core foss dashboard\district_outputs_18_19',
-    "2019-20": r'C:\Users\user\Documents\freelance\core foss dashboard\district_outputs_19_20',
-    "2020-21": r'C:\Users\user\Documents\freelance\core foss dashboard\district_outputs_20_21',
-    "2021-22": r'C:\Users\user\Documents\freelance\core foss dashboard\district_outputs_21_22',
-    "2022-23": r'C:\Users\user\Documents\freelance\core foss dashboard\district_outputs_22_23',
-    "2023-24": r'C:\Users\user\Documents\freelance\core foss dashboard\district_outputs_23_24',
-    "2024-25": r'C:\Users\user\Documents\freelance\core foss dashboard\district_outputs_24_25'
-}
+years = YEARS_LIST
+tif_dirs = TIF_DIRS
 
 def get_data(tif_path, gdf_boundary):
     if not os.path.exists(tif_path):
@@ -483,24 +523,19 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # Configuration
-boundary_dir = r'C:\Users\user\Documents\freelance\core foss dashboard\shrug updated dist mh seperate'
-base_baseline = r'C:\Users\user\Documents\freelance\core foss dashboard\baseline_mode_2017_20'
-base_recent = r'C:\Users\user\Documents\freelance\core foss dashboard\recent_mode_2022_25'
-output_dir = 'plot_1.2_cdf'
+boundary_dir = SHRUG_DISTRICT_BOUNDARIES_DIR
+base_baseline = BASELINE_MODE_DIR
+base_recent = RECENT_MODE_DIR
+output_dir = PLOT_CDF_DIR
 os.makedirs(output_dir, exist_ok=True)
 
 # Load market data
-df_market = pd.read_excel(r'C:\Users\user\Documents\freelance\core foss dashboard\mhdata.xlsx', sheet_name='dist_coord')
+df_market = pd.read_excel(MHDATA_EXCEL, sheet_name='dist_coord')
 
 # Cropping types
-cropping_types = {
-    8: "Single Kharif",
-    9: "Single Non-Kharif",
-    10: "Double Cropping",
-    11: "Triple Cropping"
-}
+cropping_types = CROPPING_CLASSES
 
-skip_districts = ['Mumbai', 'Mumbai Suburban']
+skip_districts = SKIP_DISTRICTS
 
 def get_distances_all_pixels(raster_path, gdf_boundary, gdf_markets, target_value):
     """Extract distances to market for ALL pixels (NO threshold)"""
@@ -640,22 +675,17 @@ import warnings
 warnings.filterwarnings('ignore')  # Suppress warnings
 
 # Configuration
-boundary_dir = r'C:\Users\user\Documents\freelance\core foss dashboard\shrug updated dist mh seperate'
-base_baseline = r'C:\Users\user\Documents\freelance\core foss dashboard\baseline_mode_2017_20'
-base_recent = r'C:\Users\user\Documents\freelance\core foss dashboard\recent_mode_2022_25'
-output_dir_excel = 'plot_9_distance_hotspot'
-base_histo_dir = 'plot_10_dist_histo'
+boundary_dir = SHRUG_DISTRICT_BOUNDARIES_DIR
+base_baseline = BASELINE_MODE_DIR
+base_recent = RECENT_MODE_DIR
+output_dir_excel = PLOT_DISTANCE_HOTSPOT_DIR
+base_histo_dir = PLOT_HISTOGRAM_DIR
 
 os.makedirs(output_dir_excel, exist_ok=True)
 os.makedirs(base_histo_dir, exist_ok=True)
 
 # Define layer mapping
-layers = {
-    8: "Single Kharif",
-    9: "Single Non-Kharif", 
-    10: "Double Cropping",
-    11: "Triple Cropping"
-}
+layers = CROPPING_CLASSES
 
 # Create subfolders for each layer
 for layer_name in layers.values():
@@ -665,7 +695,7 @@ for layer_name in layers.values():
 excel_path = os.path.join(output_dir_excel, 'distance_hotspot.xlsx')
 
 # Load market data
-df_market = pd.read_excel(r'C:\Users\user\Documents\freelance\core foss dashboard\mhdata.xlsx', sheet_name='dist_coord')
+df_market = pd.read_excel(MHDATA_EXCEL, sheet_name='dist_coord')
 
 def calculate_hotspot_distances(x_coords, y_coords, gdf_markets, target_crs):
     """
@@ -1060,22 +1090,17 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # Configuration (using same paths as previous code)
-boundary_dir = r'C:\Users\user\Documents\freelance\core foss dashboard\shrug updated dist mh seperate'
-base_baseline = r'C:\Users\user\Documents\freelance\core foss dashboard\baseline_mode_2017_20'
-base_recent = r'C:\Users\user\Documents\freelance\core foss dashboard\recent_mode_2022_25'
-water_bodies_path = r'C:\Users\user\Documents\freelance\core foss dashboard\water_bodies.geojson'  # Update path if needed
+boundary_dir = SHRUG_DISTRICT_BOUNDARIES_DIR
+base_baseline = BASELINE_MODE_DIR
+base_recent = RECENT_MODE_DIR
+water_bodies_path = WATER_BODIES_GEOJSON
 
 # Output folder for color plots
-output_color_dir = 'plot_11_color_by_location'
+output_color_dir = PLOT_COLOR_LOCATION_DIR
 os.makedirs(output_color_dir, exist_ok=True)
 
 # Define layers
-layers = {
-    8: "Single Kharif",
-    9: "Single Non-Kharif",
-    10: "Double Cropping",
-    11: "Triple Cropping"
-}
+layers = CROPPING_CLASSES
 
 # Create subfolders for each layer
 for layer_name in layers.values():
@@ -1083,7 +1108,7 @@ for layer_name in layers.values():
     os.makedirs(os.path.join(output_color_dir, layer_folder), exist_ok=True)
 
 # Load market data
-df_market = pd.read_excel(r'C:\Users\user\Documents\freelance\core foss dashboard\mhdata.xlsx', sheet_name='dist_coord')
+df_market = pd.read_excel(MHDATA_EXCEL, sheet_name='dist_coord')
 
 # Load water bodies (if available)
 try:
@@ -1375,11 +1400,10 @@ import pandas as pd
 from rasterio.mask import mask
 
 # Paths
-boundary_dir = r'C:\Users\user\Documents\freelance\core foss dashboard\shrug updated dist mh seperate'
-water_dir = r'C:\Users\user\Documents\freelance\core foss dashboard\core_state_rivers_dist'
-base_path = r'C:\Users\user\Documents\freelance\core foss dashboard'
-base_baseline = os.path.join(base_path, 'baseline_mode_2017_20')
-base_recent = os.path.join(base_path, 'recent_mode_2022_25')
+boundary_dir = SHRUG_DISTRICT_BOUNDARIES_DIR
+water_dir = WATER_DIR
+base_baseline = BASELINE_MODE_DIR
+base_recent = RECENT_MODE_DIR
 
 pattern_labels = {
     8: 'Single Kharif Cropping',
@@ -1389,13 +1413,13 @@ pattern_labels = {
 }
 
 # Output directories
-val_folders = {8: 'plot_4_value_8', 9: 'plot_5_value_9', 10: 'plot_6_value_10', 11: 'plot_7_value_11'}
+val_folders = VAL_FOLDERS
 for folder in val_folders.values():
     os.makedirs(folder, exist_ok=True)
 
 # Load market data
-df_market = pd.read_excel(os.path.join(base_path, 'mhdata.xlsx'), sheet_name='dist_coord')
-df_market_1 = pd.read_excel(os.path.join(base_path, 'mhdata.xlsx'), sheet_name='msamb_apmc_data')
+df_market = pd.read_excel(MHDATA_EXCEL, sheet_name='dist_coord')
+df_market_1 = pd.read_excel(MHDATA_EXCEL, sheet_name='msamb_apmc_data')
 
 def get_coords(raster_path, gdf_boundary, val):
     with rasterio.open(raster_path) as src:
@@ -1510,19 +1534,14 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # Configuration
-boundary_dir = r'C:\Users\user\Documents\freelance\core foss dashboard\shrug updated dist mh seperate'
-base_baseline = r'C:\Users\user\Documents\freelance\core foss dashboard\baseline_mode_2017_20'
-base_recent = r'C:\Users\user\Documents\freelance\core foss dashboard\recent_mode_2022_25'
-output_dir = 'plot_14_sankey_stats'
+boundary_dir = SHRUG_DISTRICT_BOUNDARIES_DIR
+base_baseline = BASELINE_MODE_DIR
+base_recent = RECENT_MODE_DIR
+output_dir = PLOT_SANKEY_STATS_DIR
 os.makedirs(output_dir, exist_ok=True)
 
 # Class labels
-class_labels = {
-    8: 'Single Kharif',
-    9: 'Single Non-Kharif', 
-    10: 'Double Cropping',
-    11: 'Triple Cropping'
-}
+class_labels = CROPPING_CLASSES
 
 # Constants
 pixel_size_sq_m = 100
@@ -1709,19 +1728,14 @@ import warnings
 warnings.filterwarnings('ignore')
 
 # Configuration
-boundary_dir = r'C:\Users\user\Documents\freelance\core foss dashboard\shrug updated dist mh seperate'
-base_baseline = r'C:\Users\user\Documents\freelance\core foss dashboard\baseline_mode_2017_20'
-base_recent = r'C:\Users\user\Documents\freelance\core foss dashboard\recent_mode_2022_25'
-output_dir = 'plot_13_sankey'
+boundary_dir = SHRUG_DISTRICT_BOUNDARIES_DIR
+base_baseline = BASELINE_MODE_DIR
+base_recent = RECENT_MODE_DIR
+output_dir = PLOT_SANKEY_DIR
 os.makedirs(output_dir, exist_ok=True)
 
 # Class labels (4 cropping types)
-class_labels = {
-    8: 'Single Kharif',
-    9: 'Single Non-Kharif', 
-    10: 'Double Cropping',
-    11: 'Triple Cropping'
-}
+class_labels = CROPPING_CLASSES
 
 # Constants
 pixel_size_sq_m = 100  # 10m x 10m pixels
@@ -1826,4 +1840,76 @@ print(f"\n{'='*50}")
 print(f"✅ Sankey plots saved to: {output_dir}")
 print(f"{'='*50}")
 
+
+
+###################################################
+
+# july 2026 convert .xlsx file to .csv files
+# use same script to all except sankey stats and transition
+##################################################
+import os
+import pandas as pd
+
+# Define base and destination paths
+base_path = r"C:\Users\user\Documents\freelance\core foss dashboard\plot_9_distance_hotspot"
+excel_file = os.path.join(base_path, "distance_hotspot_modified.xlsx")
+output_folder = os.path.join(base_path, "files")
+
+# Ensure the target subdirectory exists to avoid FileNotFoundError
+os.makedirs(output_folder, exist_ok=True)
+
+# Load the Excel workbook mapping
+xl = pd.ExcelFile(excel_file)
+
+# Iterate through each worksheet and export to the targeted subfolder
+for sheet_name in xl.sheet_names:
+    df = pd.read_excel(excel_file, sheet_name=sheet_name)
+    
+    csv_file_name = f"{sheet_name}.csv"
+    csv_file_path = os.path.join(output_folder, csv_file_name)
+    
+    # Write dataframe to CSV format
+    df.to_csv(csv_file_path, index=False)
+
+print(f"Execution complete. {len(xl.sheet_names)} CSV files written to: {output_folder}")
+
+
+
+# sankey stats and transition:
+
+import os
+import pandas as pd
+
+
+
+# Define paths
+base_path = r"C:\Users\user\Documents\freelance\core foss dashboard\plot_14_sankey_stats"
+excel_file = os.path.join(base_path, "sankey_stats.xlsx")
+
+# Target subdirectories
+sankey_folder = os.path.join(base_path, "files_sankey")
+trans_folder = os.path.join(base_path, "files_sankey_trans")
+
+# Ensure target subdirectories exist
+os.makedirs(sankey_folder, exist_ok=True)
+os.makedirs(trans_folder, exist_ok=True)
+
+# Parse the Excel workbook mapping
+xl = pd.ExcelFile(excel_file)
+
+# Route sheets based on naming pattern
+for sheet_name in xl.sheet_names:
+    df = pd.read_excel(excel_file, sheet_name=sheet_name)
+    csv_file_name = f"{sheet_name}.csv"
+    
+    if sheet_name.endswith("_transitions"):
+        # Route to transition directory
+        csv_file_path = os.path.join(trans_folder, csv_file_name)
+    else:
+        # Route to standard base directory
+        csv_file_path = os.path.join(sankey_folder, csv_file_name)
+        
+    df.to_csv(csv_file_path, index=False)
+
+print("Execution complete. Sheets routed to separate directories based on structural suffix.")
 
