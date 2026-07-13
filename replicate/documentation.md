@@ -1,7 +1,7 @@
 
 # Maharashtra Cropping Dynamics Dashboard
 
-# : Documentation & Methodology Report
+# Documentation & Methodology Report
 
 Author: Sanket Gharat, July 2026
 
