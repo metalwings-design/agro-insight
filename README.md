@@ -95,7 +95,7 @@ To understand the underlying methodology or to replicate the analysis and automa
 
 ---
 
-## Replicating Analysis for Other States
+## Extend Analysis for Other States
 
 The analytical framework developed for this dashboard is conceptually transferable to any state. However, due to variations in regional data structures and spatial infrastructure, scaling requires localized data preparation. There is no direct automated shortcut; a researcher must manually source and clean the datasets for each target state.
 
