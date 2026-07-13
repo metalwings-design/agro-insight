@@ -89,8 +89,8 @@ This module tracks longitudinal, pixel-level land cover transitions between two 
 
 To understand the underlying methodology or to replicate the analysis and automated figures locally, navigate to the `replicate/` directory:
 
-* **`replicate/documentation.docx`**: Contains comprehensive project documentation, theoretical frameworks, and data schema definitions.
-* **`replicate/how_it_works.docx`**: A step-by-step technical guide detailing execution requirements and instructions to replicate this project from scratch.
+* **`replicate/documentation.md`**: Contains comprehensive project documentation, theoretical frameworks, and data schema definitions.
+* **`replicate/how_to_replicate.md`**: A step-by-step technical guide detailing execution requirements and instructions to replicate this project from scratch.
 * **`replicate/code3_replicate.py`**: The core execution script. Run this file to ingest the pre-processed data, execute the analytical pipelines, and automatically generate the results, metrics, and plots described below.
 
 ---
