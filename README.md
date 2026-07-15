@@ -89,13 +89,13 @@ This module tracks longitudinal, pixel-level land cover transitions between two 
 
 To understand the underlying methodology or to replicate the analysis and automated figures locally, navigate to the `replicate/` directory:
 
-* **`replicate/documentation.docx`**: Contains comprehensive project documentation, theoretical frameworks, and data schema definitions.
-* **`replicate/how_it_works.docx`**: A step-by-step technical guide detailing execution requirements and instructions to replicate this project from scratch.
+* **`replicate/documentation.md`**: Contains comprehensive project documentation, theoretical frameworks, and data schema definitions.
+* **`replicate/how_to_replicate.md`**: A step-by-step technical guide detailing execution requirements and instructions to replicate this project from scratch.
 * **`replicate/code3_replicate.py`**: The core execution script. Run this file to ingest the pre-processed data, execute the analytical pipelines, and automatically generate the results, metrics, and plots described below.
 
 ---
 
-## Replicating Analysis for Other States
+## Extend Analysis for Other States
 
 The analytical framework developed for this dashboard is conceptually transferable to any state. However, due to variations in regional data structures and spatial infrastructure, scaling requires localized data preparation. There is no direct automated shortcut; a researcher must manually source and clean the datasets for each target state.
 
