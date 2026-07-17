@@ -42,9 +42,9 @@ For the baseline period, the annual rasters from 2017-18, 2018-19, and 2019-20 a
 
 To complement the spatial analysis, crop production metrics are integrated into the dashboard utilizing data from the Unified Portal for Agricultural Statistics ().
 
-**Data** **a****cquisition:** Crop-specific variables, specifically area under cultivation, total production, and yield metrics are systematically harvested from the UPAG platform. The dataset contains records for all crops cultivated across the study region.
+**Data acquisition:** Crop-specific variables, specifically area under cultivation, total production, and yield metrics are systematically harvested from the UPAG platform. The dataset contains records for all crops cultivated across the study region.
 
-**Dashboard** **integration****:** The tabular data is structured, cleaned, and ingested into the dashboard architecture. This tabular attribute dataset is coupled with the spatial layers to facilitate dual-axis validation and comparative analysis between satellite-derived LULC classifications and official empirical agricultural returns.
+**Dashboard integration**:** The tabular data is structured, cleaned, and ingested into the dashboard architecture. This tabular attribute dataset is coupled with the spatial layers to facilitate dual-axis validation and comparative analysis between satellite-derived LULC classifications and official empirical agricultural returns.
 
 **Step 4: Pixel-Wise Mode Calculation**
 For every pixel location within the district boundary, the mode (most frequently occurring value) across the three stacked layers is computed using scipy.stats.mode(). This means each pixel in the final baseline layer represents the cropping class that appeared most often during the three-year period.
